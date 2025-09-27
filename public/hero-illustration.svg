@@ -1,0 +1,17 @@
+<svg width="720" height="480" viewBox="0 0 720 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kids learning with fun worksheets and colorful illustrations">
+  <rect width="720" height="480" rx="24" fill="#EFF6FF"/>
+  <circle cx="140" cy="140" r="80" fill="#DBEAFE"/>
+  <circle cx="580" cy="120" r="60" fill="#E0F2FE"/>
+  <rect x="200" y="220" width="320" height="200" rx="16" fill="#FFFFFF" stroke="#60A5FA" stroke-width="3"/>
+  <rect x="220" y="240" width="280" height="24" rx="6" fill="#DBEAFE"/>
+  <rect x="220" y="276" width="180" height="16" rx="4" fill="#E5E7EB"/>
+  <rect x="220" y="300" width="240" height="16" rx="4" fill="#E5E7EB"/>
+  <rect x="220" y="324" width="200" height="16" rx="4" fill="#E5E7EB"/>
+  <rect x="220" y="360" width="160" height="28" rx="8" fill="#60A5FA"/>
+  <rect x="420" y="360" width="80" height="28" rx="8" fill="#34D399"/>
+  <circle cx="320" cy="160" r="18" fill="#34D399"/>
+  <circle cx="360" cy="160" r="18" fill="#FBBF24"/>
+  <circle cx="400" cy="160" r="18" fill="#F87171"/>
+  <text x="50%" y="72" dominant-baseline="middle" text-anchor="middle" fill="#2563EB" font-size="28" font-family="Arial, sans-serif">KidspireHub</text>
+</svg>
+
