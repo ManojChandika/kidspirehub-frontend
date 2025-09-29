@@ -83,6 +83,7 @@ type Worksheet = {
   dateAdded: string;
   author: string;
   language: string;
+  lastDownloadedAt?: string;
 };
 
 const ALL_GRADES: Grade[] = ['Pre-K', 'K', '1', '2', '3', '4', '5', '6'];
@@ -375,7 +376,8 @@ const WORKSHEETS: Worksheet[] = [
     tags: ['animals', 'addition', 'colorful', 'grade-1', 'printable'],
     dateAdded: '2024-01-15',
     author: 'KidsSpire Education Team',
-    language: 'English'
+    language: 'English',
+    lastDownloadedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString() // 3 hours ago
   },
   {
     id: '2',
@@ -399,7 +401,8 @@ const WORKSHEETS: Worksheet[] = [
     tags: ['letters', 'tracing', 'handwriting', 'pre-k', 'motor-skills'],
     dateAdded: '2024-01-10',
     author: 'KidsSpire Education Team',
-    language: 'English'
+    language: 'English',
+    lastDownloadedAt: new Date(Date.now() - 50 * 60 * 1000).toISOString() // 50 minutes ago
   },
   {
     id: '3',
@@ -423,7 +426,8 @@ const WORKSHEETS: Worksheet[] = [
     tags: ['ocean', 'animals', 'science', 'coloring', 'grade-2'],
     dateAdded: '2024-01-08',
     author: 'Marine Biology Experts',
-    language: 'English'
+    language: 'English',
+    lastDownloadedAt: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString() // 30 hours ago (won't show)
   },
   {
     id: '4',
@@ -447,7 +451,8 @@ const WORKSHEETS: Worksheet[] = [
     tags: ['shapes', 'sorting', 'kindergarten', 'geometry', 'puzzle'],
     dateAdded: '2024-01-12',
     author: 'Early Math Specialists',
-    language: 'English'
+    language: 'English',
+    lastDownloadedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString() // 10 minutes ago
   },
   {
     id: '5',
@@ -485,7 +490,7 @@ const WORKSHEETS: Worksheet[] = [
     difficulty: 'Hard',
     duration: '45 min',
     downloads: 892,
-    rating: 4.4,
+    rating: 3.4,
     imageUrl: '/api/placeholder/400/300',
     isFavorite: false,
     isNew: false,
@@ -495,7 +500,8 @@ const WORKSHEETS: Worksheet[] = [
     tags: ['weather', 'assessment', 'science', 'grade-4', 'meteorology'],
     dateAdded: '2024-01-03',
     author: 'Science Curriculum Team',
-    language: 'English'
+    language: 'English',
+    lastDownloadedAt: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString() // 26 hours ago (won't show)
   }
 ];
 
@@ -846,6 +852,23 @@ export default function WorksheetsPage() {
       month: 'short',
       day: 'numeric'
     });
+  };
+
+  const isWithinLast24Hours = (isoDateTime: string | undefined) => {
+    if (!isoDateTime) return false;
+    const parsed = new Date(isoDateTime).getTime();
+    if (Number.isNaN(parsed)) return false;
+    const diffMs = Date.now() - parsed;
+    return diffMs >= 0 && diffMs < 24 * 60 * 60 * 1000;
+  };
+
+  const formatRelativeTimeFromNow = (isoDateTime: string) => {
+    const parsed = new Date(isoDateTime).getTime();
+    const diffMs = Date.now() - parsed;
+    const minutes = Math.floor(diffMs / (60 * 1000));
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
   };
 
 	const favoriteItems = useMemo(() => WORKSHEETS.filter(w => favorites.includes(w.id)), [favorites]);
@@ -1591,10 +1614,12 @@ export default function WorksheetsPage() {
                               >
                                 {worksheet.title}
                               </h3>
-                              <div className="flex items-center gap-1 text-sm text-gray-600 flex-shrink-0" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
-                                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                <span itemProp="ratingValue">{worksheet.rating}</span>
-                              </div>
+                              {worksheet.rating > 3.5 && (
+                                <div className="flex items-center gap-1 text-sm text-gray-600 flex-shrink-0" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                  <span itemProp="ratingValue">{worksheet.rating}</span>
+                                </div>
+                              )}
                             </header>
 
                             <p 
@@ -1610,10 +1635,12 @@ export default function WorksheetsPage() {
                                 <Award className="h-3 w-3" />
                                 Grade {worksheet.grade}
                               </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                <span itemProp="timeRequired">{worksheet.duration}</span>
-                              </div>
+                              {isWithinLast24Hours(worksheet.lastDownloadedAt) && (
+                                <div className="flex items-center gap-1" title={`Last downloaded ${formatRelativeTimeFromNow(worksheet.lastDownloadedAt!)}`}>
+                                  <Clock className="h-3 w-3" />
+                                  <span>Downloaded {formatRelativeTimeFromNow(worksheet.lastDownloadedAt!)}</span>
+                                </div>
+                              )}
                               <div className="flex items-center gap-1">
                                 <Users className="h-3 w-3" />
                                 <span itemProp="interactionStatistic">{formatDownloads(worksheet.downloads)}</span>

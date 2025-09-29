@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"components\\\\Header.tsx -> ./AuthModal\":{\"id\":\"components\\\\Header.tsx -> ./AuthModal\",\"files\":[\"static/chunks/_app-pages-browser_src_components_AuthModal_tsx.js\"]}}"
